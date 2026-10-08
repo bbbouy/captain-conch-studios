@@ -1,0 +1,26 @@
+name: Cut out queen conch
+on:
+  push:
+    paths: [.github/workflows/cutout2.yml]
+permissions:
+  contents: write
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install "rembg[cpu,cli]" pillow
+      - run: |
+          rembg i -m isnet-general-use _work/cand_32.jpg /tmp/cut.png
+          python - <<'PY'
+          from PIL import Image
+          im = Image.open("/tmp/cut.png").convert("RGBA")
+          im = im.crop(im.getchannel("A").point(lambda a: 255 if a > 20 else 0).getbbox())
+          im.thumbnail((900, 900)); im.save("_work/conch2.png")
+          PY
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add _work/conch2.png && git commit -m "Queen conch cutout" && git push
