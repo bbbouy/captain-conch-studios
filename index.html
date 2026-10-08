@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="icon" href="images/logo.png">
 <style>
   /* Bahamas flag colours */
   :root {
@@ -56,7 +58,8 @@
 
   nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; }
   .logo { font-family: Fraunces, serif; font-weight: 800; font-size: 1.3rem; letter-spacing: .4px; text-shadow: 0 2px 8px rgba(0,0,0,.35); }
-  .logo span { color: var(--gold); }
+  .logo .logo-text { color: #fff; }
+  .logo .logo-text span { color: var(--gold); }
   nav a.btn-sm { font-size: .9rem; font-weight: 600; text-decoration: none; background: var(--black); color: var(--gold); padding: 8px 16px; border-radius: 999px; }
 
   .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 24px; padding: 48px 0 80px; }
@@ -76,7 +79,7 @@
 
   .conch-wrap { display: flex; justify-content: center; }
   .conch {
-    width: min(100%, 520px);
+    width: 100%;
     height: auto;
     filter: drop-shadow(0 26px 30px rgba(0,0,0,.40));
     transform: rotate(-12deg);
@@ -120,6 +123,49 @@
   footer { text-align: center; font-size: .85rem; color: #5b6e72; padding: 26px 20px 40px; }
   footer a { color: var(--aqua-deep); }
 
+  /* ---------- Logo ---------- */
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo img { width: 58px; height: 58px; border-radius: 50%; box-shadow: 0 6px 18px rgba(0,0,0,.35); transition: transform .5s cubic-bezier(.3,1.6,.5,1); }
+  .logo:hover img { transform: rotate(-12deg) scale(1.08); }
+
+  .badge-logo { width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 18px; display: block; box-shadow: 0 14px 36px rgba(0,0,0,.30); transition: transform .6s cubic-bezier(.3,1.6,.5,1); }
+  .badge-logo:hover { transform: rotate(8deg) scale(1.06); }
+
+  /* ---------- Conch: tap to blow ---------- */
+  .conch-wrap { position: relative; flex-direction: column; align-items: center; }
+  .conch-btn { background: none; border: 0; padding: 0; cursor: pointer; display: block; width: min(100%, 460px); -webkit-tap-highlight-color: transparent; }
+  .conch-btn .conch { width: 100%; }
+  .conch-btn:active .conch { animation-play-state: paused; }
+  .conch-hint { margin-top: 6px; font-size: .85rem; font-weight: 700; background: var(--black); color: var(--gold); padding: 6px 14px; border-radius: 999px; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+  .ripple { position: absolute; left: 50%; top: 45%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 4px solid var(--gold); pointer-events: none; animation: ripple 1.2s ease-out forwards; }
+  @keyframes ripple { from { transform: scale(.4); opacity: .9; } to { transform: scale(9); opacity: 0; } }
+
+  /* ---------- Hover & motion ---------- */
+  .cta, nav a.btn-sm { transition: transform .2s, box-shadow .2s; }
+  .cta:hover, nav a.btn-sm:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(0,0,0,.25); }
+  .card, .step { transition: transform .25s, box-shadow .25s; }
+  .card:hover { transform: translateY(-8px) rotate(-.5deg); box-shadow: 0 18px 36px rgba(0,119,139,.20); }
+  .card:hover .icon { animation: wiggle .6s ease; }
+  .step:hover { transform: translateY(-6px); border-color: var(--gold); }
+  @keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-14deg); } 75% { transform: rotate(14deg); } }
+  .card .icon { display: inline-block; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- Social ---------- */
+  .socials { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 26px 0 0; }
+  .socials a { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; background: var(--black); color: var(--gold); font-size: 1.45rem; text-decoration: none; transition: transform .25s cubic-bezier(.3,1.6,.5,1), background .2s, color .2s; }
+  .socials a:hover { transform: translateY(-6px) scale(1.12) rotate(-6deg); background: var(--gold); color: var(--black); }
+  footer .socials { margin: 0 0 14px; }
+  footer .socials a { width: 40px; height: 40px; font-size: 1.05rem; }
+  .contact-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 120px); background: var(--black); color: #fff; border-left: 5px solid var(--gold); padding: 12px 20px; border-radius: 12px; font-weight: 600; box-shadow: 0 12px 30px rgba(0,0,0,.35); transition: transform .35s cubic-bezier(.3,1.4,.5,1); z-index: 50; }
+  .toast.show { transform: translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
   /* ---------- Small screens ---------- */
   @media (max-width: 760px) {
     .hero { min-height: 0; }
@@ -128,7 +174,8 @@
     nav a.btn-sm { white-space: nowrap; padding: 7px 13px; }
     .hero-grid { grid-template-columns: 1fr; padding: 28px 0 72px; }
     .conch-wrap { order: -1; }
-    .conch { width: min(70%, 300px); }
+    .conch-btn { width: min(62%, 270px); }
+    .logo img { width: 46px; height: 46px; }
     .hero-card { padding: 26px 22px; }
   }
 </style>
@@ -138,7 +185,7 @@
 <header class="hero">
   <div class="wrap">
     <nav>
-      <div class="logo">Captain Conch <span>Studios</span></div>
+      <a class="logo" href="#"><img src="images/logo.webp" alt="Captain Conch Studios logo" width="58" height="58"><span class="logo-text">Captain Conch <span>Studios</span></span></a>
       <a class="btn-sm" href="#contact">Work with us</a>
     </nav>
     <div class="hero-grid">
@@ -149,7 +196,10 @@
         <a class="cta" href="#services">See what we do</a>
       </div>
       <div class="conch-wrap">
-        <img class="conch" src="images/conch.webp" alt="A queen conch shell with its pink lip">
+        <button class="conch-btn" id="conch" aria-label="Blow the conch shell">
+          <img class="conch" src="images/conch.webp" alt="A Bahamian queen conch shell">
+        </button>
+        <span class="conch-hint">🐚 Tap the conch</span>
       </div>
     </div>
   </div>
@@ -163,17 +213,17 @@
     <h2>What we make</h2>
     <p class="lead">Small studio, quick turnaround, and a real person in the Bahamas you can talk to.</p>
     <div class="cards">
-      <div class="card">
+      <div class="card reveal">
         <div class="icon">🌐</div>
         <h3>Business websites</h3>
         <p>A clean, mobile-friendly site for your restaurant, tour, shop or charter, with your hours, photos, prices and a way for customers to reach you.</p>
       </div>
-      <div class="card">
+      <div class="card reveal">
         <div class="icon">🎮</div>
         <h3>Games</h3>
         <p>Roblox and browser games full of Caribbean colour, including the lane-runner Jungle Run Jump Dash.</p>
       </div>
-      <div class="card">
+      <div class="card reveal">
         <div class="icon">🐚</div>
         <h3>Tourism guides</h3>
         <p>Helpful guides for cruise visitors exploring Nassau, like <a href="https://captainconchbahamas.com">captainconchbahamas.com</a>.</p>
@@ -187,27 +237,118 @@
     <h2>How a website project works</h2>
     <p class="lead">No tech headaches on your side.</p>
     <div class="steps">
-      <div class="step"><strong>Tell us about your business.</strong> A short chat or voice note is enough.</div>
-      <div class="step"><strong>See a first version.</strong> You get a live link to try on your own phone.</div>
-      <div class="step"><strong>Ask for changes.</strong> New prices, photos or hours, updated quickly.</div>
-      <div class="step"><strong>Go live.</strong> Your site on your own web address, ready for customers.</div>
+      <div class="step reveal"><strong>Tell us about your business.</strong> A short chat or voice note is enough.</div>
+      <div class="step reveal"><strong>See a first version.</strong> You get a live link to try on your own phone.</div>
+      <div class="step reveal"><strong>Ask for changes.</strong> New prices, photos or hours, updated quickly.</div>
+      <div class="step reveal"><strong>Go live.</strong> Your site on your own web address, ready for customers.</div>
     </div>
   </div>
 </section>
 
 <section id="contact" class="contact">
   <div class="wrap">
+    <img class="badge-logo reveal" src="images/logo.webp" alt="Captain Conch Studios logo">
     <h2>Want a website for your business?</h2>
-    <p class="lead">Get in touch through our tourism site and tell us what you need.</p>
-    <a class="cta" href="https://captainconchbahamas.com">Contact Captain Conch</a>
+    <p class="lead">Send us a message and tell us what you need. We'll get back to you quickly.</p>
+    <div class="contact-row">
+      <a class="cta" id="email-btn" href="#"><i class="fa-solid fa-envelope"></i>&nbsp; Email us</a>
+      <a class="cta" href="https://captainconchbahamas.com" style="background:#fff;color:#0B0B0B"><i class="fa-solid fa-compass"></i>&nbsp; Visit our guide</a>
+    </div>
+    <div class="socials">
+      <a href="#" class="soon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" class="soon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" class="soon" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+      <a href="#" class="soon" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="#" class="soon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+    </div>
   </div>
 </section>
 
 <div class="stripe"></div>
 <footer>
+  <div class="socials">
+    <a href="#" class="soon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#" class="soon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="#" class="soon" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+    <a href="#" class="soon" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+    <a href="#" class="soon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+    </div>
   © 2026 Captain Conch Studios · Nassau, Bahamas<br>
-  Conch photo by <a href="https://unsplash.com/@msaimakin">Mustafa akın</a> on <a href="https://unsplash.com/photos/iY3NQuIybNU">Unsplash</a>
+  Queen conch photo by <a href="https://commons.wikimedia.org/wiki/File:Strombus_gigas_(queen_conch)_3_(25058998465).jpg">James St. John</a>, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>, background removed
 </footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+  // Put the studio email address here and the "Email us" button starts working.
+  const STUDIO_EMAIL = "";
+
+  const toast = document.getElementById("toast");
+  let toastTimer;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+  }
+
+  // Social icons: links come later
+  document.querySelectorAll("a.soon").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    showToast(a.getAttribute("aria-label") + " page coming soon!");
+  }));
+
+  // Email button
+  const emailBtn = document.getElementById("email-btn");
+  if (STUDIO_EMAIL) emailBtn.href = "mailto:" + STUDIO_EMAIL;
+  else emailBtn.addEventListener("click", e => { e.preventDefault(); showToast("Email address coming soon!"); });
+
+  // Fade sections in as you scroll
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+  }), { threshold: 0.15 });
+  document.querySelectorAll(".reveal").forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 90 + "ms";
+    io.observe(el);
+  });
+
+  // Tap the conch: it blows like a real conch horn
+  const conchBtn = document.getElementById("conch");
+  let audio;
+  function blowConch() {
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const t = audio.currentTime, dur = 1.6;
+      const out = audio.createGain();
+      out.gain.setValueAtTime(0.0001, t);
+      out.gain.exponentialRampToValueAtTime(0.35, t + 0.12);
+      out.gain.setValueAtTime(0.35, t + dur - 0.35);
+      out.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      const lp = audio.createBiquadFilter();
+      lp.type = "lowpass"; lp.frequency.value = 900; lp.Q.value = 6;
+      lp.connect(out); out.connect(audio.destination);
+      const vib = audio.createOscillator(), vibAmt = audio.createGain();
+      vib.frequency.value = 5; vibAmt.gain.value = 3;
+      vib.connect(vibAmt);
+      [[196, "sawtooth", 0.6], [392, "square", 0.15], [198, "triangle", 0.5]].forEach(([f, type, g]) => {
+        const o = audio.createOscillator(), og = audio.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(f * 0.92, t);
+        o.frequency.exponentialRampToValueAtTime(f, t + 0.18);
+        vibAmt.connect(o.frequency);
+        og.gain.value = g;
+        o.connect(og); og.connect(lp);
+        o.start(t); o.stop(t + dur);
+      });
+      vib.start(t); vib.stop(t + dur);
+    } catch (e) {}
+    const r = document.createElement("span");
+    r.className = "ripple";
+    conchBtn.parentElement.appendChild(r);
+    setTimeout(() => r.remove(), 1300);
+  }
+  conchBtn.addEventListener("click", blowConch);
+</script>
 
 </body>
 </html>
