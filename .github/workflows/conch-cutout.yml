@@ -1,0 +1,53 @@
+name: Make conch cutout
+
+on:
+  push:
+    paths:
+      - .github/workflows/conch-cutout.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cutout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install background remover
+        run: pip install "rembg[cpu,cli]" pillow
+
+      - name: Download conch photo (Unsplash License, photo by Mustafa akin)
+        run: |
+          mkdir -p images
+          curl -sSL -o /tmp/conch.jpg "https://images.unsplash.com/photo-1759728886965-da7fd4626b48?fm=jpg&q=90&w=1600"
+          file /tmp/conch.jpg
+
+      - name: Cut out the shell
+        run: |
+          rembg i -m isnet-general-use /tmp/conch.jpg /tmp/conch-cut.png
+          python - <<'PY'
+          from PIL import Image
+          im = Image.open("/tmp/conch-cut.png").convert("RGBA")
+          bbox = im.getchannel("A").point(lambda a: 255 if a > 20 else 0).getbbox()
+          im = im.crop(bbox)
+          im.thumbnail((1100, 1100))
+          im.save("images/conch.png", optimize=True)
+          prev = Image.open("/tmp/conch.jpg").convert("RGB")
+          prev.thumbnail((600, 600))
+          prev.save("images/conch-original-preview.jpg", quality=80)
+          print("cutout size", im.size)
+          PY
+
+      - name: Save into the project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add images/
+          git commit -m "Add conch shell cutout" || echo "nothing new"
+          git push
